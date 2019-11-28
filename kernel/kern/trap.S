@@ -85,8 +85,10 @@ EXCEPTIONHANDLER:
     nop
     andi k1, k0, 0x00FF             // 截取CP0_CAUSE 的ExcCode
     srl k1, k1, 2
+    andi t0, k0, 0xFF00             // obtain interrupt vector
+    srl t0, t0, 8
     ori k0, zero, EX_IRQ            // 硬件中断
-    beq k1, k0, WAKEUPSHELL         // 让主线程控制
+    beq k1, k0, INTERRUPT         // 让主线程控制
     nop
     ori k0, zero, EX_SYS            // 系统调用
     beq k1, k0, SYSCALL             // 内核处理
@@ -139,7 +141,24 @@ RETURNFRMTRAP:
     eret
     nop
 
+INTERRUPT:
+    andi k0, t0, 16
+    bne k0, zero, WAKEUPSHELL       // IRQ 4 serial
+    nop
+    andi k0, t0, 8                  // IRQ 3 gpio input
+    bne k0, zero, GPIOINT
+    nop
+    // TODO: handle other hw interrupts
+    j RETURNFRMTRAP                 // ignore other hw interrupts
+    nop
 
+GPIOINT:
+    lui t0, 0xb100
+    lb t1, 0x0(t0)                   // read from GPIO register
+    sw t1, 0x4(t0)                   // write to GPIO register
+    sw zero, 0x1c(t0)                // clear int status
+    j RETURNFRMTRAP
+    nop
 
 WAKEUPSHELL:
     lui t1, %hi(current)

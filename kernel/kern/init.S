@@ -119,7 +119,7 @@ bss_init_done:
 #ifdef ENABLE_INT
     /* enable serial interrupt */
     mfc0 t0, CP0_STATUS
-    ori t0, t0, STATUSF_IP4         // hardware interrupt source #2, irq #4
+    ori t0, t0, STATUSF_IP4 | STATUSF_IP3  // hardware interrupt source #2, irq #4
     mtc0 t0, CP0_STATUS
 #endif
 

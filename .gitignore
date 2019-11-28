@@ -1,6 +1,7 @@
 *.mp4
 kernel/kernel.elf
 kernel/kernel.bin
+kernel/kernel.dump
 kernel/.config_*
 */obj/*
 *.test
