@@ -67,6 +67,9 @@ kernel.bin: $(TARGET)
 show-utest: $(TARGET)
 	@$(GCCPREFIX)objdump -D $< | grep "^[0-9a-f]\{8\} <UTEST_" | grep -n --color=auto 'UTEST_'
 
+dump: $(TARGET)
+	@$(GCCPREFIX)objdump -d $< > kernel.dump
+
 .PHONY: commits-num show-utest sim clean
 
 sim: $(TARGET)

@@ -1,3 +1,4 @@
+#include <shell.h>
 #include <regdef.h>
 #include <mipsregs.h>
 #include <unistd.h>
@@ -153,8 +154,8 @@ INTERRUPT:
     nop
 
 GPIOINT:
-    lui t0, 0xb100
-    lb t1, 0x0(t0)                   // read from GPIO register
+    lui t0, %hi(GPIOBASE)
+    lw t1, 0x1c(t0)                   // read from GPIO register
     sw t1, 0x4(t0)                   // write to GPIO register
     sw zero, 0x1c(t0)                // clear int status
     j RETURNFRMTRAP

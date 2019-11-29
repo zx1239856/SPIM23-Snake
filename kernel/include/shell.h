@@ -12,5 +12,7 @@
 #define TIMERSET    0x06            // ascii (ACK) 启动计时
 #define TIMETOKEN   0x07            // ascii (BEL) 停止计时
 
+#define GPIOBASE    0xB1000000      // GPIO RAM
+#define GRAMBASE    0xBA000000      // Graphics RAM
 
 #endif

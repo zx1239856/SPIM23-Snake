@@ -56,5 +56,9 @@ SECTIONS
         *(.text)
         . = ALIGN(0x1000); /* "fixed" utest address */
         *(.text.utest)
+        . = ALIGN(0x1000);
+        *(.text.snake)
+        . = ALIGN(0x10);
+        *(.text.display)
     }
 }
