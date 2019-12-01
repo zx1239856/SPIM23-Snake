@@ -149,8 +149,15 @@ INTERRUPT:
     andi k0, t0, 8                  // IRQ 3 gpio input
     bne k0, zero, GPIOINT
     nop
-    // TODO: handle other hw interrupts
-    j RETURNFRMTRAP                 // ignore other hw interrupts
+    andi k0, t0, 4                  // IRQ 2 timer int
+    bne k0, zero, TIMERINT
+    nop
+    j FATAL
+    nop
+
+TIMERINT:
+    // TODO
+    j RETURNFRMTRAP
     nop
 
 GPIOINT:

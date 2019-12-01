@@ -6,6 +6,7 @@
 
 #define BLUE        0xd8
 #define GREEN       0x7c
+#define BORDERGREEN 0x6c
 #define DARKGREEN   0x08
 #define WHITE       0xff
 #define YELLOW      0x3f
@@ -138,25 +139,31 @@ SnakeLoop:
     li t2, 0x1
     beq t1, t2, _InputRight
     nop
+    move t4, s4
     j _NoInput
     nop
 _InputUp:
-    li s4, UP
+    li t4, UP
     j _NoInput
     nop
 _InputDown:
-    li s4, DOWN
+    li t4, DOWN
     j _NoInput
     nop
 _InputLeft:
-    li s4, LEFT
+    li t4, LEFT
     j _NoInput
     nop
 _InputRight:
-    li s4, RIGHT
-    j _NoInput
-    nop
+    li t4, RIGHT
 _NoInput:
+    sub t5, t4, s4
+    sub t6, s4, t4
+    slt t7, t5, zero  # t5 < zero ?
+    movn t5, t6, t7   # t5 = abs(dst-src)
+    li t6, 2
+    sub t5, t5, t6
+    movn s4, t4, t5   # if not the opposite direction
     jal MoveSnake
     nop
     bnez v0, SnakeLoop # move success, continue the game
@@ -224,7 +231,7 @@ _Finish:
 
     li a0, 75
     li a1, 60
-    li a2, GREEN
+    li a2, YELLOW
     lui a3, %hi(charcode_0)
     ori a3, a3, %lo(charcode_0)
     li t0, 35
@@ -242,7 +249,7 @@ _Finish:
 
     li a0, 82
     li a1, 60
-    li a2, GREEN
+    li a2, YELLOW
     lui a3, %hi(charcode_0)
     ori a3, a3, %lo(charcode_0)
     li t0, 35
@@ -259,7 +266,7 @@ _Finish:
 
     li a0, 89
     li a1, 60
-    li a2, GREEN
+    li a2, YELLOW
     lui a3, %hi(charcode_0)
     ori a3, a3, %lo(charcode_0)
     li t0, 35
@@ -748,7 +755,7 @@ FillBorder:
 
     move s0, zero  # x
     move s1, zero  # y
-    li a2, GREEN
+    li a2, BORDERGREEN
     li a3, WALL
 
 _LFillTopBar:

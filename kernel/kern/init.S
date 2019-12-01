@@ -119,7 +119,7 @@ bss_init_done:
 #ifdef ENABLE_INT
     /* enable serial interrupt */
     mfc0 t0, CP0_STATUS
-    ori t0, t0, STATUSF_IP4 | STATUSF_IP3  // hardware interrupt source #2, irq #4
+    ori t0, t0, STATUSF_IP5 | STATUSF_IP4 | STATUSF_IP3 | STATUSF_IP2 // hardware interrupt source #2, irq #4
     mtc0 t0, CP0_STATUS
 #endif
 
@@ -284,6 +284,8 @@ bss_init_done:
 
 
 WELCOME:
+    jal ClearScreen
+    nop
     lui s0, %hi(monitor_version)    // 装入启动信息
     addiu s0, %lo(monitor_version)
     lb a0, 0(s0)
